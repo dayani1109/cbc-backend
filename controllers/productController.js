@@ -34,7 +34,7 @@ export async function createProduct(req, res){
 
 export async function getProduct(req, res){
     try{
-        const products = await product.find()
+        const products = await Product.find()
         res.json(products);
 
     }catch(err){
