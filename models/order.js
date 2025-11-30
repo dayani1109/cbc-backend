@@ -12,24 +12,25 @@ const orderschema = new mongoose.Schema(
                 {
                     productID: {
                         type:String,
-                        required : true,
+                        required : true
                     },
                     quantity: {
                         type:Number,
-                        required : true,
-                    },
-                    price : {
-                        type : Number,
-                        required : true
-                    },
-                    images : {
-                        type : String,
                         required : true
                     },
                     name : {
                         type : String,
                         required : true
+                    },
+                    price : {
+                        type : Number,
+                        required : true
+                    },
+                    image : {
+                        type : String,
+                        required : true
                     }
+                    
                 }
             ]
         },
@@ -39,7 +40,7 @@ const orderschema = new mongoose.Schema(
         },
         email : {
             type:String,
-            required : true,
+            required : true
         },
         phone : {
             type : String,
@@ -51,7 +52,7 @@ const orderschema = new mongoose.Schema(
         },
         total : {
             type : Number,
-            required : true,
+            required : true
         },
         status : {
             type:String,
