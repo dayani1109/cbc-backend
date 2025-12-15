@@ -1,6 +1,5 @@
 import express from "express" ;
 import mongoose from "mongoose";
-import studentRouter from "./routes/studentRouter.js";
 import userRouter from "./routes/userRouter.js";
 import jwt from "jsonwebtoken";
 import productRouter from "./routes/productRouter.js";
@@ -57,7 +56,7 @@ mongoose.connect(connectionString).then(
     }
 )
 
-app.use("/api/students", studentRouter)
+
 app.use("/api/users", userRouter)
 app.use("/api/products", productRouter)
 app.use("/api/orders", orderRouter)
