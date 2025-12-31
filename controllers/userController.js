@@ -429,55 +429,55 @@ export async function changePasswordViaOTP(req, res) {
     }
 }
 
-// export async function updateUserData(req, res) {
-// 	if (req.user == null) {
-// 		res.status(401).json({
-// 			message: "Unauthorized",
-// 		});
-// 		return;
-// 	}
+export async function updateUserData(req, res) {
+    if (req.user == null) {//check user null
+        res.status(401).json({
+            message: "Unauthorized",
+        });
+        return;
+    }
 
-// 	try{
+    try {
 
-// 		await User.updateOne({
-// 			email: req.user.email
-// 		},{
-// 			firstName: req.body.firstName,
-// 			lastName: req.body.lastName,
-// 			image: req.body.image
-// 		})
-// 		res.json({
-// 			message: "User data updated successfully",
-// 		});
-// 	}catch(err){
-// 		res.status(500).json({
-// 			message: "Failed to update user data",
-// 		});
-// 	}
-// }
+        await User.updateOne({//update karana kenage mail ek aragen e mail ekt anuwa update karanva
+            email: req.user.email
+        }, {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            image: req.body.image
+        })
+        res.json({
+            message: "User data updated successfully",
+        });
+    } catch (err) {
+        res.status(500).json({
+            message: "Failed to update user data",
+        });
+    }
+}
 
-// export async function updatePassword(req, res) {
-// 	if (req.user == null) {
-// 		res.status(401).json({
-// 			message: "Unauthorized",
-// 		});
-// 		return;
-// 	}
-// 	try{
-// 		const hashedPassword = bcrypt.hashSync(req.body.password, 10);
-// 		await User.updateOne({
-// 			email: req.user.email
-// 		},{
-// 			password: hashedPassword
-// 		})
-// 		res.json({
-// 			message: "Password updated successfully",
-// 		});
-// 	}
-// 	catch(err){
-// 		res.status(500).json({
-// 			message: "Failed to update password",
-// 		});
-// 	}
-// }
+export async function updatePassword(req, res) {
+    if (req.user == null) {
+        res.status(401).json({
+            message: "Unauthorized",
+        });
+        return;
+    }
+    try {
+        const hashedPassword = bcrypt.hashSync(req.body.password, 10);//hash password ek hadagannva
+        await User.updateOne({
+            email: req.user.email
+        }, {
+            password: hashedPassword
+        })
+        res.json({
+            message: "Password updated successfully",
+        });
+    }
+    catch (err) {
+        res.status(500).json({
+            message: "Failed to update password",
+        });
+    }
+}
 
