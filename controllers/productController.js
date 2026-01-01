@@ -3,36 +3,36 @@ import { isAdmin } from "./userController.js";
 
 export async function createProduct(req, res) {
 
-    if(!isAdmin(req)){
+    if (!isAdmin(req)) {
         res.status(403).json({
             message: "You are not authorized to create a product"
         });
         return;
     }
 
-	try {
-        
-		const productData = req.body;
+    try {
 
-		const product = new Product(productData);
+        const productData = req.body;
 
-		await product.save();
+        const product = new Product(productData);
 
-		res.json({
-			message: "Product created successfully",
-			product: product,
-		});
-        
-	} catch (err) {
+        await product.save();
+
+        res.json({
+            message: "Product created successfully",
+            product: product,
+        });
+
+    } catch (err) {
         console.error(err);
         res.status(500).json({
             message: "Failed to create product",
         });
-	}
+    }
 }
 
-export async function getProducts(req,res){
-    try {        
+export async function getProducts(req, res) {
+    try {
         const products = await Product.find()
         res.json(products);
     } catch (err) {
@@ -43,26 +43,26 @@ export async function getProducts(req,res){
     }
 }
 
-export async function deleteProduct(req,res){
-    if(!isAdmin(req)){
+export async function deleteProduct(req, res) {
+    if (!isAdmin(req)) {
         res.status(403).json({
             message: "You are not authorized to delete a product"
         });
         return;
     }
-    try{
+    try {
 
         const productID = req.params.productID
-        
+
 
         await Product.deleteOne({
-            productID : productID
+            productID: productID
         })
 
         res.json({
             message: "Product deleted successfully"
         });
-    }catch(err){
+    } catch (err) {
         console.error(err);
         res.status(500).json({
             message: "Failed to delete product",
@@ -70,28 +70,28 @@ export async function deleteProduct(req,res){
     }
 }
 
-export async function updateProduct(req,res){
-    if(!isAdmin(req)){
+export async function updateProduct(req, res) {
+    if (!isAdmin(req)) {
         res.status(403).json({
             message: "You are not authorized to update a product"
         });
         return;
     }
 
-    try{
+    try {
         const productID = req.params.productID;
 
         const updatedData = req.body;
 
         await Product.updateOne(
-            {productID : productID},
+            { productID: productID },
             updatedData
         );
 
         res.json({
             message: "Product updated successfully"
         });
-    }catch(err){
+    } catch (err) {
         console.error(err);
         res.status(500).json({
             message: "Failed to update product",
@@ -99,26 +99,51 @@ export async function updateProduct(req,res){
     }
 }
 
-export async function getProductId(req,res){
-    try{
+export async function getProductId(req, res) {
+    try {
         const productID = req.params.productID;
 
         const product = await Product.findOne(
             {
-                productID : productID
+                productID: productID
             }
         )
-        if(product == null){
+        if (product == null) {
             res.status(404).json({
                 message: "Product not found"
             });
-        }else{
+        } else {
             res.json(product);
         }
-    }catch(err){
+    } catch (err) {
         console.error(err);
         res.status(500).json({
             message: "Failed to retrieve product by ID",
+        });
+    }
+}
+
+export async function getProductsBySearch(req, res) {
+    console.log("SEARCH QUERY:", req.params.query);
+    try {
+        const query = req.params.query;//search ekt thama query kiyanne 
+
+        const products = await Product.find(
+            {//hoyaganna product name-> name eke kohe hari search karana part ek thiyenvanam
+                $or: [
+                    {
+                        name: { $regex: query, $options: "i" },//regrex use karanne string samana karanna-> query ek product name vala kohe hari thiyenvanm ek ahuvenva ... and option -> case insencitive
+                    },
+                    {//name ek vagem altNames hariynvd kiyalath balanva
+                        altNames: { $elemMatch: { $regex: query, $options: "i" } },//here match element 
+                    },
+                ],//$or array ek athule thiyena onam condition ekak hari giyoth
+            });
+        res.json(products);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({
+            message: "Failed to search products",
         });
     }
 }

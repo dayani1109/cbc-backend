@@ -176,10 +176,15 @@ export async function getOrders(req, res) {
         const orders = await Order.find().sort({ date: -1 })//dine anith peththat ena vidiyt okkom order tika hoyala denna order tika
         res.json(orders);
     } else if (isCustomer(req)) {
-        const user = req.user
-        const orders = (await Order.find({ email: user.email })).toSorted({ date: -1 })
-        res.json(orders)
-    } else {
+        const user = req.user;
+
+        const orders = await Order
+            .find({ email: user.email })
+            .sort({ date: -1 });
+
+        res.json(orders);
+    }
+    else {
         res.status(403).json(
             {
                 message: "You are not authorized to view orders"
